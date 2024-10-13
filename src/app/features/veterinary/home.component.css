@@ -1,0 +1,30 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.active{
+    color: #9054fb;
+}
+
+
+.link{
+    transition: width 0.5s ease-in-out;
+}
+.link.active::after{
+    background-color: #9054fb;
+}
+.link::after {
+    content: "";
+    width: 0;
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #fff;
+    height: 0.2rem;
+    transition: width 0.2s ease-in-out;
+}
+
+.link:hover::after {
+    width: 100%;
+}
