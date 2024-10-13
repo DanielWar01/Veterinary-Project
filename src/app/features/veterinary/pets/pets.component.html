@@ -1,1 +1,42 @@
-<p>pets works!</p>
+<div class="max-w-6xl mx-auto">
+    <div class="flex">
+        <h2 class="my-4 text-3xl font-black">Mascotas registradas</h2>
+    </div>
+    
+    <!-- Contenedor responsivo con scroll horizontal -->
+    <div class="overflow-x-auto">
+        <table class="min-w-full table-auto bg-white border border-gray-200">
+            <thead>
+                <tr class="bg-gray-100 text-left">
+                    <th class="px-4 py-2 border-b border-gray-200">Id</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Nombre</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Especie</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Raza</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Fecha de nacimiento</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                @for(pet of pets; track pet._id) {
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-2 whitespace-nowrap">{{ pet._id }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ pet.name }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ pet.species }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ pet.race }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ pet.date_of_birth }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">
+                            <div class="flex justify-around">
+                                <button>
+                                    <img class="w-6 hover:scale-105 duration-200" src="../../../../assets/images/boligrafo.png" alt="Editar">
+                                </button>
+                                <button>
+                                    <img class="w-6 hover:scale-105 duration-200" src="../../../../assets/images/eliminar.png" alt="Eliminar">
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

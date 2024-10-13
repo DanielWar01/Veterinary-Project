@@ -1,1 +1,44 @@
-<p>owners works!</p>
+<div class="max-w-6xl mx-auto">
+    <div class="flex">
+        <h2 class="my-4 text-3xl font-black">Propietarios registrados</h2>
+    </div>
+    
+    <!-- Contenedor responsivo con scroll horizontal -->
+    <div class="overflow-x-auto">
+        <table class="min-w-full table-auto bg-white border border-gray-200">
+            <thead>
+                <tr class="bg-gray-100 text-left">
+                    <th class="px-4 py-2 border-b border-gray-200">Id</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Nombre</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Género</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Teléfono</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Correo</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Mascotas</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Acciones</th>
+                </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                @for(owner of owners; track owner._id) {
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-2 whitespace-nowrap">{{ owner._id }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ owner.name }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ owner.gender }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ owner.phone }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ owner.email }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ owner.pets }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">
+                            <div class="flex justify-around">
+                                <button>
+                                    <img class="w-6 hover:scale-105 duration-200" src="../../../../assets/images/boligrafo.png" alt="Editar">
+                                </button>
+                                <button>
+                                    <img class="w-6 hover:scale-105 duration-200" src="../../../../assets/images/eliminar.png" alt="Eliminar">
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
