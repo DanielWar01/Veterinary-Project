@@ -1,86 +1,97 @@
-<div class="max-w-6xl mx-auto">
+<div class="max-w-6xl mx-auto mt-5">
     
     <!-- Botón para mostrar el formulario -->
     <button class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded mb-4" (click)="toggleForm()">
-        {{ showForm ? 'Cancelar' : 'Agregar Owner' }}
+        {{ showForm ? 'Cancelar' : 'Agregar Propietario' }}
     </button>
 
-<!-- Formulario para agregar un nuevo owner, visible cuando showForm es true -->
-<div *ngIf="showForm" class="form-container mb-4">
-    <form (ngSubmit)="saveOwner()">
-    <div class="form-group mb-2">
-        <label for="name">Nombre:</label>
-        <input id="name" type="text" class="form-control" [(ngModel)]="currentOwner.name" name="name" required>
-    </div>
-    <div class="form-group mb-2">
-        <label for="gender">Género:</label>
-        <input id="gender" type="text" class="form-control" [(ngModel)]="currentOwner.gender" name="gender" required>
-    </div>
-    <div class="form-group mb-2">
-        <label for="phone">Teléfono:</label>
-        <input id="phone" type="number" class="form-control" [(ngModel)]="currentOwner.phone" name="phone" required>
-    </div>
-    <div class="form-group mb-2">
-        <label for="email">Correo Electrónico:</label>
-        <input id="email" type="email" class="form-control" [(ngModel)]="currentOwner.email" name="email" required>
-    </div>
-    <div class="form-group mb-2">
-        <label for="pets">Mascotas (IDs separadas por comas):</label>
-        <input id="pets" type="text" class="form-control" [(ngModel)]="petInput" name="pets">
-    </div>
-    <div class="flex justify-between">
-        <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-            {{ isEditing ? 'Actualizar' : 'Guardar' }}
-        </button>
-        <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" (click)="toggleForm()">Cancelar</button>
-    </div>
-    </form>
-</div>
+    <!-- Formulario para agregar un nuevo owner, visible cuando showForm es true -->
+    <div *ngIf="showForm" class="form-container mb-4">
+        <form (ngSubmit)="saveOwner()">
+            <!-- Nombre -->
+            <div class="form-group my-4">
+                <label class="block text-lg font-semibold mb-2" for="name">Nombre:</label>
+                <input id="name" type="text" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500" [(ngModel)]="currentOwner.name" name="name" required>
+            </div>
 
-<div *ngIf="errorMessage" class="error-message bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-    <span class="block sm:inline">{{ errorMessage }}</span>
-</div>
+            <!-- Género -->
+            <div class="form-group my-4">
+                <label class="block text-lg font-semibold mb-2" for="gender">Género:</label>
+                <input id="gender" type="text" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500" [(ngModel)]="currentOwner.gender" name="gender" required>
+            </div>
 
-<div class="flex">
-    <h2 class="my-4 text-3xl font-black">Propietarios registrados</h2>
-</div>
+            <!-- Teléfono -->
+            <div class="form-group my-4">
+                <label class="block text-lg font-semibold mb-2" for="phone">Teléfono:</label>
+                <input id="phone" type="number" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500" [(ngModel)]="currentOwner.phone" name="phone" required>
+            </div>
 
-<!-- Contenedor responsivo con scroll horizontal -->
-<div class="overflow-x-auto">
-    <table class="min-w-full table-auto bg-white border border-gray-200">
-        <thead>
-            <tr class="bg-gray-100 text-left">
-                <th class="px-4 py-2 border-b border-gray-200">Id</th>
-                <th class="px-4 py-2 border-b border-gray-200">Nombre</th>
-                <th class="px-4 py-2 border-b border-gray-200">Género</th>
-                <th class="px-4 py-2 border-b border-gray-200">Teléfono</th>
-                <th class="px-4 py-2 border-b border-gray-200">Correo</th>
-                <th class="px-4 py-2 border-b border-gray-200">Mascotas</th>
-                <th class="px-4 py-2 border-b border-gray-200">Acciones</th>
-            </tr>
-        </thead>
-        <tbody class="divide-y divide-gray-200">
-            @for(owner of owners; track owner._id) {
-                <tr class="hover:bg-gray-50">
-                    <td class="px-4 py-2 whitespace-nowrap">{{ owner._id }}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">{{ owner.name }}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">{{ owner.gender }}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">{{ owner.phone }}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">{{ owner.email }}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">{{ owner.pets }}</td>
-                    <td class="px-4 py-2 whitespace-nowrap">
-                        <div class="flex justify-around">
-                            <button (click)="editOwner(owner)">
-                                <img class="w-6 hover:scale-105 duration-200" src="../../../../assets/images/boligrafo.png" alt="Editar">
-                            </button>
-                            <button (click)="owner._id && deleteOwner(owner._id)" [disabled]="!owner._id">
-                                <img class="w-6 hover:scale-105 duration-200" [ngClass]="{'opacity-50': !owner._id}" src="../../../../assets/images/eliminar.png" alt="Eliminar">
-                            </button>
-                        </div>
-                    </td>
+            <!-- Correo Electrónico -->
+            <div class="form-group my-4">
+                <label class="block text-lg font-semibold mb-2" for="email">Correo Electrónico:</label>
+                <input id="email" type="email" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500" [(ngModel)]="currentOwner.email" name="email" required>
+            </div>
+
+            <!-- Mascotas -->
+            <div class="form-group my-4">
+                <label class="block text-lg font-semibold mb-2" for="pets">Mascotas (IDs separadas por comas):</label>
+                <input id="pets" type="text" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500" [(ngModel)]="petInput" name="pets">
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="flex justify-between mt-5">
+                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                </button>
+                <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" (click)="toggleForm()">Cancelar</button>
+            </div>
+        </form>
+    </div>
+
+    <div *ngIf="errorMessage" class="error-message bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <span class="block sm:inline">{{ errorMessage }}</span>
+    </div>
+
+    <div class="flex">
+        <h2 class="my-4 text-3xl font-black">Propietarios registrados</h2>
+    </div>
+
+    <!-- Contenedor responsivo con scroll horizontal -->
+    <div class="overflow-x-auto">
+        <table class="min-w-full table-auto bg-white border border-gray-200">
+            <thead>
+                <tr class="bg-gray-100 text-left">
+                    <th class="px-4 py-2 border-b border-gray-200">Id</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Nombre</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Género</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Teléfono</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Correo</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Mascotas</th>
+                    <th class="px-4 py-2 border-b border-gray-200">Acciones</th>
                 </tr>
-            }
-        </tbody>
-    </table>
-</div>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+                @for(owner of owners; track owner._id) {
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-4 py-2 whitespace-nowrap">{{ owner._id }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ owner.name }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ owner.gender }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ owner.phone }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ owner.email }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ owner.pets }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">
+                            <div class="flex justify-around">
+                                <button (click)="editOwner(owner)">
+                                    <img class="w-6 hover:scale-105 duration-200" src="../../../../assets/images/boligrafo.png" alt="Editar">
+                                </button>
+                                <button (click)="owner._id && deleteOwner(owner._id)" [disabled]="!owner._id">
+                                    <img class="w-6 hover:scale-105 duration-200" [ngClass]="{'opacity-50': !owner._id}" src="../../../../assets/images/eliminar.png" alt="Eliminar">
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
 </div>

@@ -1,6 +1,7 @@
 
 import { Component } from '@angular/core';
-import { RouterModule, RouterOutlet } from '@angular/router';
+import { Router, RouterModule, RouterOutlet } from '@angular/router';
+import { LoginService } from './core/services/LoginService/login.service';
 
 @Component({
   selector: 'app-root',
@@ -11,4 +12,12 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 })
 export class AppComponent {  // Changed to named export
   title = 'Veterinary-Project';
+  constructor(
+    private loginService: LoginService, 
+    private router: Router
+  ) {}
+  log_out(): void {
+    this.loginService.logout();
+    this.router.navigate(['/login']);
+  }
 }

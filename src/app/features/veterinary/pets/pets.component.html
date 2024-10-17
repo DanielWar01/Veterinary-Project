@@ -1,45 +1,55 @@
-<div class="max-w-6xl mx-auto">
-
-    <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded" (click)="toggleForm()">
+<div class="max-w-6xl mx-auto mt-5">
+    
+    <!-- Botón para mostrar el formulario -->
+    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4" (click)="toggleForm()">
         {{ showForm ? 'Cancelar' : 'Agregar Animal' }}
     </button>
 
-        <!-- Formulario para agregar animal -->
-        <div *ngIf="showForm" class="form-container">
+    <!-- Formulario para agregar animal -->
+    <div *ngIf="showForm" class="form-container mb-4">
         <form (ngSubmit)="savePet()">
-            <div class="form-group">
-            <label for="name">Nombre:</label>
-            <input id="name" type="text" class="form-control" [(ngModel)]="currentPet.name" name="name" required>
+            <!-- Nombre -->
+            <div class="form-group my-4">
+                <label class="block text-lg font-semibold mb-2" for="name">Nombre:</label>
+                <input id="name" type="text" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" [(ngModel)]="currentPet.name" name="name" required>
             </div>
-            <div class="form-group">
-            <label for="species">Especie:</label>
-            <input id="species" type="text" class="form-control" [(ngModel)]="currentPet.species" name="species" required>
+
+            <!-- Especie -->
+            <div class="form-group my-4">
+                <label class="block text-lg font-semibold mb-2" for="species">Especie:</label>
+                <input id="species" type="text" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" [(ngModel)]="currentPet.species" name="species" required>
             </div>
-            <div class="form-group">
-            <label for="breed">Raza:</label>
-            <input id="breed" type="text" class="form-control" [(ngModel)]="currentPet.race" name="race" required>
+
+            <!-- Raza -->
+            <div class="form-group my-4">
+                <label class="block text-lg font-semibold mb-2" for="breed">Raza:</label>
+                <input id="breed" type="text" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" [(ngModel)]="currentPet.race" name="race" required>
             </div>
-            <div class="form-group">
-            <label for="birthDate">Fecha de Nacimiento:</label>
-            <input id="birthDate" type="date" class="form-control" [(ngModel)]="currentPet.date_of_birth" name="date_of_birth" required>
+
+            <!-- Fecha de Nacimiento -->
+            <div class="form-group my-4">
+                <label class="block text-lg font-semibold mb-2" for="birthDate">Fecha de Nacimiento:</label>
+                <input id="birthDate" type="date" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" [(ngModel)]="currentPet.date_of_birth" name="date_of_birth" required>
             </div>
-            <div class="flex justify-between">
+
+            <!-- Botones de acción -->
+            <div class="flex justify-between mt-5">
                 <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                     {{ isEditing ? 'Actualizar' : 'Guardar' }}
                 </button>
                 <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" (click)="toggleForm()">Cancelar</button>
             </div>
         </form>
-        </div>
+    </div>
 
-        <div *ngIf="errorMessage" class="error-message bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
-            <span class="block sm:inline">{{ errorMessage }}</span>
-        </div>
+    <div *ngIf="errorMessage" class="error-message bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+        <span class="block sm:inline">{{ errorMessage }}</span>
+    </div>
 
     <div class="flex">
         <h2 class="my-4 text-3xl font-black">Mascotas registradas</h2>
     </div>
-        
+    
     <!-- Contenedor responsivo con scroll horizontal -->
     <div class="overflow-x-auto">
         <table class="min-w-full table-auto bg-white border border-gray-200">

@@ -9,26 +9,24 @@ export const routes: Routes = [
     {
         path: '',
         component: HomeComponent,
-        canActivate: [AuthGuard],
-        children: [
-            {
-                path: 'pets',
-                title: 'Pets',
-                component: PetsComponent,
-                canActivate: [AuthGuard]
-            },
-            {
-                path: 'owners',
-                title: 'Owners',
-                component: OwnersComponent,
-                canActivate: [AuthGuard]
-            },
-            {
-                path: '',
-                redirectTo: '',
-                pathMatch: 'full'
-            }
-        ]
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'pets',
+        title: 'Pets',
+        component: PetsComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: 'owners',
+        title: 'Owners',
+        component: OwnersComponent,
+        canActivate: [AuthGuard]
+    },
+    {
+        path: '',
+        redirectTo: '',
+        pathMatch: 'full'
     },
     {
         path: 'login',
