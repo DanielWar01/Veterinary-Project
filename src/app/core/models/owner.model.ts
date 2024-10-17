@@ -1,8 +1,8 @@
 export interface Owner{
-    _id: string
+    _id?: string
     name: string
     gender: string
     phone: number
     email: string
-    pets: [string]
+    pets: string[]
 }

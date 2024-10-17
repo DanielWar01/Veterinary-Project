@@ -1,8 +1,45 @@
 <div class="max-w-6xl mx-auto">
+
+    <button class="bg-blue-500 text-white font-bold py-2 px-4 rounded" (click)="toggleForm()">
+        {{ showForm ? 'Cancelar' : 'Agregar Animal' }}
+    </button>
+
+        <!-- Formulario para agregar animal -->
+        <div *ngIf="showForm" class="form-container">
+        <form (ngSubmit)="savePet()">
+            <div class="form-group">
+            <label for="name">Nombre:</label>
+            <input id="name" type="text" class="form-control" [(ngModel)]="currentPet.name" name="name" required>
+            </div>
+            <div class="form-group">
+            <label for="species">Especie:</label>
+            <input id="species" type="text" class="form-control" [(ngModel)]="currentPet.species" name="species" required>
+            </div>
+            <div class="form-group">
+            <label for="breed">Raza:</label>
+            <input id="breed" type="text" class="form-control" [(ngModel)]="currentPet.race" name="race" required>
+            </div>
+            <div class="form-group">
+            <label for="birthDate">Fecha de Nacimiento:</label>
+            <input id="birthDate" type="date" class="form-control" [(ngModel)]="currentPet.date_of_birth" name="date_of_birth" required>
+            </div>
+            <div class="flex justify-between">
+                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                </button>
+                <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" (click)="toggleForm()">Cancelar</button>
+            </div>
+        </form>
+        </div>
+
+        <div *ngIf="errorMessage" class="error-message bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">{{ errorMessage }}</span>
+        </div>
+
     <div class="flex">
         <h2 class="my-4 text-3xl font-black">Mascotas registradas</h2>
     </div>
-    
+        
     <!-- Contenedor responsivo con scroll horizontal -->
     <div class="overflow-x-auto">
         <table class="min-w-full table-auto bg-white border border-gray-200">
@@ -26,11 +63,11 @@
                         <td class="px-4 py-2 whitespace-nowrap">{{ pet.date_of_birth }}</td>
                         <td class="px-4 py-2 whitespace-nowrap">
                             <div class="flex justify-around">
-                                <button>
+                                <button (click)="toggleForm(pet)">
                                     <img class="w-6 hover:scale-105 duration-200" src="../../../../assets/images/boligrafo.png" alt="Editar">
                                 </button>
-                                <button>
-                                    <img class="w-6 hover:scale-105 duration-200" src="../../../../assets/images/eliminar.png" alt="Eliminar">
+                                <button (click)="pet._id && deletePet(pet._id)" [disabled]="!pet._id">
+                                    <img class="w-6 hover:scale-105 duration-200" [ngClass]="{'opacity-50': !pet._id}" src="../../../../assets/images/eliminar.png" alt="Eliminar">
                                 </button>
                             </div>
                         </td>
