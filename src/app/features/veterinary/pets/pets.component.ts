@@ -2,12 +2,12 @@ import { Component, inject, OnInit } from '@angular/core';
 import { PetService } from '../../../core/services/PetService/pet.service';
 import { Pet } from '../../../core/models/pet.model';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-pets',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, DatePipe],
   templateUrl: './pets.component.html',
   styleUrl: './pets.component.css',
 })

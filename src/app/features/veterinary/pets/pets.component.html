@@ -70,7 +70,7 @@
                         <td class="px-4 py-2 whitespace-nowrap">{{ pet.name }}</td>
                         <td class="px-4 py-2 whitespace-nowrap">{{ pet.species }}</td>
                         <td class="px-4 py-2 whitespace-nowrap">{{ pet.race }}</td>
-                        <td class="px-4 py-2 whitespace-nowrap">{{ pet.date_of_birth }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">{{ pet.date_of_birth | date: 'dd/MM/yyyy' }}</td>
                         <td class="px-4 py-2 whitespace-nowrap">
                             <div class="flex justify-around">
                                 <button (click)="toggleForm(pet)">
