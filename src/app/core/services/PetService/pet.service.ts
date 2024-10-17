@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { LoginService } from '../LoginService/login.service';
 import { Pet } from '../../models/pet.model';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -28,8 +29,8 @@ export class PetService {
     return this.http.get(this.baseUrl, { headers: this.getHeaders() });
   }
 
-  get(id: string) {
-    return this.http.get(`${this.baseUrl}/${id}`, { headers: this.getHeaders() });
+  get(id: string): Observable<Pet> {
+    return this.http.get<Pet>(`${this.baseUrl}/${id}`, { headers: this.getHeaders() });
   }
 
   create(pet: Pet) {

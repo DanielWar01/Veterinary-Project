@@ -3,6 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { OwnerService } from '../../../core/services/OwnerService/owner.service';
 import { Owner } from '../../../core/models/owner.model';
+import { PetService } from '../../../core/services/PetService/pet.service';
+import { Pet } from '../../../core/models/pet.model';
 
 @Component({
   selector: 'app-owners',
@@ -15,6 +17,7 @@ export default class OwnersComponent implements OnInit {
   showForm = false;
   owners: Owner[] = [];
   errorMessage: string = '';
+  pets: Pet[] = [];
   currentOwner: Owner = {
     name: '',
     gender: '',
@@ -25,22 +28,51 @@ export default class OwnersComponent implements OnInit {
   isEditing = false;
   petInput: string = '';
 
-  constructor(private ownerService: OwnerService) {}
+  constructor(
+    private ownerService: OwnerService,
+    private petService: PetService) {}
 
   ngOnInit(): void {
     this.loadOwners();
+    this.loadAnimals();
   }
 
   loadOwners(): void {
     this.ownerService.list().subscribe(
       (response: any) => {
         this.owners = response.data;
+        this.replacePetIdsWithNames(); // Reemplazar los IDs de mascotas con nombres
       },
       (error:any) => {
         console.error('Error loading owners:', error);
         this.errorMessage = 'Error al cargar los propietarios.';
       }
     );
+  }
+
+  loadAnimals(): void {
+    this.petService.list().subscribe(
+      (response: any) => {
+        this.pets = response.data;
+        this.replacePetIdsWithNames(); // Asegurar que se llama después de cargar las mascotas
+      },
+      (error) => {
+        console.error('Error loading pets:', error);
+        this.errorMessage = 'Error al cargar las mascotas.';
+      }
+    );
+  }
+
+  replacePetIdsWithNames(): void {
+    if (this.owners.length > 0 && this.pets.length > 0) {
+      this.owners.forEach((owner) => {
+        const petNames: string[] = owner.pets.map(petId => {
+          const pet = this.pets.find(p => p._id === petId); // Buscar la mascota por ID
+          return pet ? pet.name : 'Desconocido'; // Reemplazar el ID por el nombre, o 'Desconocido' si no se encuentra
+        });
+        owner.pets = petNames; // Asignar los nombres de las mascotas
+      });
+    }
   }
 
   toggleForm(owner?: Owner): void {
