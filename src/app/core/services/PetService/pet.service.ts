@@ -45,5 +45,11 @@ export class PetService {
     return this.http.delete(`${this.baseUrl}/${id}`, { headers: this.getHeaders() });
   }
 
+  addAppointment(petId: string, appointmentId: string): Observable<Pet> {
+    return this.http.post<Pet>(`${this.baseUrl}/${petId}/appointments`, {
+      appointmentId: appointmentId,
+    });
+  }
+
   constructor() {}
 }

@@ -4,4 +4,5 @@ export interface Pet {
     species: string
     race: string
     date_of_birth: Date
+    appointments?: String[];
 }

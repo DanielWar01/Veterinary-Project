@@ -1,9 +1,10 @@
 <div class="max-w-6xl mx-auto mt-5">
     
     <!-- Botón para mostrar el formulario -->
-    <button class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded mb-4" (click)="toggleForm()">
-        {{ showForm ? 'Cancelar' : 'Agregar Propietario' }}
-    </button>
+    <button
+    *ngIf="!showForm"
+    class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded mb-4"
+    (click)="toggleForm()">Agregar Propietario </button>
 
     <!-- Formulario para agregar un nuevo owner, visible cuando showForm es true -->
     <div *ngIf="showForm" class="form-container mb-4">
@@ -34,8 +35,19 @@
 
             <!-- Mascotas -->
             <div class="form-group my-4">
-                <label class="block text-lg font-semibold mb-2" for="pets">Mascotas (IDs separadas por comas):</label>
-                <input id="pets" type="text" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500" [(ngModel)]="petInput" name="pets">
+                <label class="block text-lg font-semibold mb-2" for="pets">Mascota:</label>
+                <select
+                    id="pets"
+                    [(ngModel)]="currentOwner.pets"
+                    name="pets"
+                    multiple
+                    class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500"
+                    style="max-height: 150px; overflow-y: auto;"
+                >
+                    <option *ngFor="let pet of pets" [value]="pet._id">
+                        {{ pet.name }}
+                    </option>
+                </select>
             </div>
 
             <!-- Botones de acción -->
@@ -61,7 +73,6 @@
         <table class="min-w-full table-auto bg-white border border-gray-200">
             <thead>
                 <tr class="bg-gray-100 text-left">
-                    <th class="px-4 py-2 border-b border-gray-200">Id</th>
                     <th class="px-4 py-2 border-b border-gray-200">Nombre</th>
                     <th class="px-4 py-2 border-b border-gray-200">Género</th>
                     <th class="px-4 py-2 border-b border-gray-200">Teléfono</th>
@@ -73,7 +84,6 @@
             <tbody class="divide-y divide-gray-200">
                 @for(owner of owners; track owner._id) {
                     <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-2 whitespace-nowrap">{{ owner._id }}</td>
                         <td class="px-4 py-2 whitespace-nowrap">{{ owner.name }}</td>
                         <td class="px-4 py-2 whitespace-nowrap">{{ owner.gender }}</td>
                         <td class="px-4 py-2 whitespace-nowrap">{{ owner.phone }}</td>

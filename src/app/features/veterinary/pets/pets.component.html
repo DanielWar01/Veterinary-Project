@@ -55,7 +55,6 @@
         <table class="min-w-full table-auto bg-white border border-gray-200">
             <thead>
                 <tr class="bg-gray-100 text-left">
-                    <th class="px-4 py-2 border-b border-gray-200">Id</th>
                     <th class="px-4 py-2 border-b border-gray-200">Nombre</th>
                     <th class="px-4 py-2 border-b border-gray-200">Especie</th>
                     <th class="px-4 py-2 border-b border-gray-200">Raza</th>
@@ -66,7 +65,6 @@
             <tbody class="divide-y divide-gray-200">
                 @for(pet of pets; track pet._id) {
                     <tr class="hover:bg-gray-50">
-                        <td class="px-4 py-2 whitespace-nowrap">{{ pet._id }}</td>
                         <td class="px-4 py-2 whitespace-nowrap">{{ pet.name }}</td>
                         <td class="px-4 py-2 whitespace-nowrap">{{ pet.species }}</td>
                         <td class="px-4 py-2 whitespace-nowrap">{{ pet.race }}</td>

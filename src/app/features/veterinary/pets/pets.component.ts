@@ -119,4 +119,20 @@ export default class PetsComponent implements OnInit {
       );
     }
   }
+
+  addAppointmentToPet(petId: string, appointmentId: string): void {
+    this.petService.addAppointment(petId, appointmentId).subscribe({
+      next: (updatedPet) => {
+        // Actualizar la lista de mascotas o solo la mascota específica
+        this.loadAnimals(); // Recarga las mascotas para reflejar los cambios
+        console.log('Cita asignada correctamente:', updatedPet);
+      },
+      error: (err) => {
+        console.error('Error al asignar la cita:', err);
+        this.errorMessage = 'No se pudo asignar la cita a la mascota.';
+      },
+    });
+  }
+  
+
 }

@@ -100,14 +100,17 @@ export default class OwnersComponent implements OnInit {
   }
 
   saveOwner(): void {
-    this.currentOwner.pets = this.petInput.split(',').map(pet => pet.trim()).filter(pet => pet !== '');
+    const ownerToSave = {
+        ...this.currentOwner,
+        pets: this.currentOwner.pets.map(petId => petId), // Asegúrate de enviar solo los IDs
+    };
 
     if (this.isEditing && this.currentOwner._id) {
-      this.updateOwner(this.currentOwner._id, this.currentOwner);
+        this.updateOwner(this.currentOwner._id, ownerToSave);
     } else {
-      this.addOwner(this.currentOwner);
+        this.addOwner(ownerToSave);
     }
-  }
+}
 
   addOwner(ownerData: Owner): void {
     this.ownerService.create(ownerData).subscribe(

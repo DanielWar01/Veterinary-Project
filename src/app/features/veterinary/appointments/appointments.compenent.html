@@ -1,0 +1,106 @@
+<div class="appointments-container">
+    <!-- Mensaje de error -->
+    <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+    </div>
+
+    <!-- Botón para mostrar el formulario -->
+    <button (click)="toggleForm()" class="btn btn-primary">
+        {{ showForm ? "Cerrar Formulario" : "Agregar Cita" }}
+    </button>
+
+    <!-- Formulario para agregar/editar citas -->
+    <form *ngIf="showForm" (ngSubmit)="saveAppointment()">
+        <div>
+            <label for="pet_id">Mascota:</label>
+            <select
+                id="pet_id"
+                [(ngModel)]="currentAppointment.pet_id"
+                name="pet_id"
+                required
+                class="form-select"
+            >
+                <option *ngFor="let pet of pets | keyvalue" [value]="pet.key">
+                    {{ pet.value }}
+                </option>
+            </select>
+        </div>
+
+        <div>
+            <label for="date_time">Fecha y Hora:</label>
+            <input
+                id="date_time"
+                type="datetime-local"
+                [(ngModel)]="currentAppointment.date_time"
+                name="date_time"
+                required
+                class="form-control"
+            />
+        </div>
+
+        <div>
+            <label for="reason">Razón:</label>
+            <input
+                id="reason"
+                type="text"
+                [(ngModel)]="currentAppointment.reason"
+                name="reason"
+                required
+                class="form-control"
+            />
+        </div>
+
+        <div>
+            <label for="status">Estado:</label>
+            <select
+                id="status"
+                [(ngModel)]="currentAppointment.status"
+                name="status"
+                class="form-select"
+            >
+                <option value="scheduled">Programado</option>
+                <option value="completed">Completado</option>
+                <option value="cancelled">Cancelado</option>
+            </select>
+        </div>
+
+        <button type="submit" class="btn btn-success mt-2">
+            {{ isEditing ? "Actualizar Cita" : "Guardar Cita" }}
+        </button>
+    </form>
+
+    <!-- Tabla de citas -->
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Mascota</th>
+                <th>Fecha</th>
+                <th>Razón</th>
+                <th>Estado</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let appointment of appointments">
+                <td>{{ pets[appointment.pet_id] || 'Desconocido' }}</td>
+                <td>{{ appointment.date_time | date: 'short' }}</td>
+                <td>{{ appointment.reason }}</td>
+                <td>{{ appointment.status }}</td>
+                <td>
+                    <button
+                        (click)="toggleForm(appointment)"
+                        class="btn btn-warning"
+                    >
+                        Editar
+                    </button>
+                    <button
+                        (click)="appointment._id && deleteAppointment(appointment._id)"
+                        class="btn btn-danger"
+                    >
+                        Eliminar
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
