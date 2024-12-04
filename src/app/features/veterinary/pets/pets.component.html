@@ -41,6 +41,38 @@
             </div>
         </form>
     </div>
+    
+    <div *ngIf="showFormAppoinment" class="form-container mb-4">
+        <form (ngSubmit)="addAppointmentToPet(currentPet._id, currentAppointment)">
+            <h2 class="text-xl font-bold">Agregar cita</h2>
+            
+            <!-- Nombre -->
+            <div class="form-group my-4">
+                <label class="block text-lg font-semibold mb-2" for="name">Nombre:</label>
+                <input id="name" type="text" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" [(ngModel)]="currentPet.name" name="name" required>
+            </div>
+            
+            <!-- Fecha de Cita -->
+            <div class="form-group my-4">
+                <label class="block text-lg font-semibold mb-2" for="date_time">Fecha de la Cita:</label>
+                <input id="date_time" type="datetime-local" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" [(ngModel)]="currentAppointment.date_time" name="date_of_birth" required>
+            </div>
+
+            <!-- Razon -->
+            <div class="form-group my-4">
+                <label class="block text-lg font-semibold mb-2" for="reason">Razón:</label>
+                <input id="reason" type="text" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500" [(ngModel)]="currentAppointment.reason" name="reason" required>
+            </div>
+
+            <!-- Botones de acción -->
+            <div class="flex justify-between mt-5">
+                <button type="submit" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                    {{ isEditing ? 'Actualizar' : 'Guardar' }}
+                </button>
+                <button type="button" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded" (click)="toggleForm()">Cancelar</button>
+            </div>
+        </form>
+    </div>
 
     <div *ngIf="errorMessage" class="error-message bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
         <span class="block sm:inline">{{ errorMessage }}</span>
@@ -73,6 +105,9 @@
                             <div class="flex justify-around">
                                 <button (click)="toggleForm(pet)">
                                     <img class="w-6 hover:scale-105 duration-200" src="../../../../assets/images/boligrafo.png" alt="Editar">
+                                </button>
+                                <button (click)="toggleFormAppointment(pet)">
+                                    <img class="w-6 hover:scale-105 duration-200" src="../../../../assets/images/calendario.png" alt="Editar">
                                 </button>
                                 <button (click)="pet._id && deletePet(pet._id)" [disabled]="!pet._id">
                                     <img class="w-6 hover:scale-105 duration-200" [ngClass]="{'opacity-50': !pet._id}" src="../../../../assets/images/eliminar.png" alt="Eliminar">

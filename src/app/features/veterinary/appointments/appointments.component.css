@@ -1,4 +1,8 @@
 /* Estilos del formulario */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 form {
     display: flex;
     flex-direction: column;

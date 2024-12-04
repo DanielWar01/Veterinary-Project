@@ -5,68 +5,68 @@
     </div>
 
     <!-- Botón para mostrar el formulario -->
-    <button (click)="toggleForm()" class="btn btn-primary">
+    <button (click)="toggleForm()" class="my-5 px-6 py-2 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-300">
         {{ showForm ? "Cerrar Formulario" : "Agregar Cita" }}
-    </button>
+    </button>    
 
     <!-- Formulario para agregar/editar citas -->
-    <form *ngIf="showForm" (ngSubmit)="saveAppointment()">
-        <div>
-            <label for="pet_id">Mascota:</label>
+    <form *ngIf="showForm" (ngSubmit)="saveAppointment()" class="bg-white p-6 rounded-lg shadow-md max-w-xl mx-auto">
+        <div class="mb-4">
+            <label for="pet_id" class="block text-sm font-medium text-gray-700">Mascota:</label>
             <select
                 id="pet_id"
                 [(ngModel)]="currentAppointment.pet_id"
                 name="pet_id"
                 required
-                class="form-select"
+                class="form-select mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             >
                 <option *ngFor="let pet of pets | keyvalue" [value]="pet.key">
                     {{ pet.value }}
                 </option>
             </select>
         </div>
-
-        <div>
-            <label for="date_time">Fecha y Hora:</label>
+    
+        <div class="mb-4">
+            <label for="date_time" class="block text-sm font-medium text-gray-700">Fecha y Hora:</label>
             <input
                 id="date_time"
                 type="datetime-local"
                 [(ngModel)]="currentAppointment.date_time"
                 name="date_time"
                 required
-                class="form-control"
+                class="form-control mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             />
         </div>
-
-        <div>
-            <label for="reason">Razón:</label>
+    
+        <div class="mb-4">
+            <label for="reason" class="block text-sm font-medium text-gray-700">Razón:</label>
             <input
                 id="reason"
                 type="text"
                 [(ngModel)]="currentAppointment.reason"
                 name="reason"
                 required
-                class="form-control"
+                class="form-control mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             />
         </div>
-
-        <div>
-            <label for="status">Estado:</label>
+    
+        <div class="mb-4">
+            <label for="status" class="block text-sm font-medium text-gray-700">Estado:</label>
             <select
                 id="status"
                 [(ngModel)]="currentAppointment.status"
                 name="status"
-                class="form-select"
+                class="form-select mt-2 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
             >
                 <option value="scheduled">Programado</option>
                 <option value="completed">Completado</option>
                 <option value="cancelled">Cancelado</option>
             </select>
         </div>
-
-        <button type="submit" class="btn btn-success mt-2">
+    
+        <button type="submit" class="mt-4 w-full py-2 px-4 bg-green-500 text-white font-semibold rounded-md shadow-md hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-300">
             {{ isEditing ? "Actualizar Cita" : "Guardar Cita" }}
-        </button>
+        </button>        
     </form>
 
     <!-- Tabla de citas -->
@@ -82,22 +82,22 @@
         </thead>
         <tbody>
             <tr *ngFor="let appointment of appointments">
-                <td>{{ pets[appointment.pet_id] || 'Desconocido' }}</td>
+                <td>{{ appointment.pet_id.name || 'Desconocido' }}</td>
                 <td>{{ appointment.date_time | date: 'short' }}</td>
                 <td>{{ appointment.reason }}</td>
                 <td>{{ appointment.status }}</td>
-                <td>
+                <td class="flex justify-around">
                     <button
                         (click)="toggleForm(appointment)"
                         class="btn btn-warning"
                     >
-                        Editar
+                    <img class="w-6 hover:scale-105 duration-200" src="../../../../assets/images/boligrafo.png" alt="Editar">
                     </button>
                     <button
                         (click)="appointment._id && deleteAppointment(appointment._id)"
                         class="btn btn-danger"
                     >
-                        Eliminar
+                    <img class="w-6 hover:scale-105 duration-200" [ngClass]="{'opacity-50': !appointment._id}" src="../../../../assets/images/eliminar.png" alt="Eliminar">
                     </button>
                 </td>
             </tr>

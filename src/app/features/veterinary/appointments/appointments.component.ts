@@ -1,9 +1,19 @@
-import { Component, OnInit } from '@angular/core';
-import { AppointmentService } from '../../../core/services/AppointmentService/appointment.service';
-import { PetService } from '../../../core/services/PetService/pet.service';
-import { Appointment } from '../../../core/models/appointment.model';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
+import { Apollo } from 'apollo-angular';
+import { Appointment } from '../../../core/models/appointment.model';
+import {
+    GET_APPOINTMENTS,
+    CREATE_APPOINTMENT,
+    UPDATE_APPOINTMENT,
+    DELETE_APPOINTMENT_BY_ID,
+    GET_PETS,
+} from '../../../graphql.operations';
+import { AppointmentService } from '../../../core/services/AppointmentService/appointment.service';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+
 
 @Component({
     selector: 'app-appointments',
@@ -12,51 +22,99 @@ import { CommonModule, DatePipe } from '@angular/common';
     templateUrl: './appointments.compenent.html',
     styleUrls: ['./appointments.component.css'],
 })
-export default class AppointmentsComponent implements OnInit { // Cambiar a export default
-  appointments: Appointment[] = []; // Lista de citas
-  showForm: boolean = false; // Controla la visibilidad del formulario
-  isEditing: boolean = false; // Indica si se está editando una cita
-  errorMessage: string = ''; // Mensaje de error
+export default class AppointmentsComponent implements OnInit {
+    appointments: Appointment[] = []; // Lista de citas
+    pets: { [key: string]: string } = {}; // Relación de ID a nombre de mascotas
+    showForm = false; // Controla la visibilidad del formulario
+    isEditing = false; // Indica si se está editando una cita
+    errorMessage = ''; // Mensaje de error
+
     currentAppointment: Appointment = {
-        pet_id: '',
+        pet_id: {
+            name: ''
+        },
         date_time: '',
         reason: '',
         status: 'scheduled',
     }; // Cita actual para crear o editar
+    querySubscription: Subscription = new Subscription();
+    loading = false;
 
-    constructor(private appointmentService: AppointmentService, private petService: PetService) {}
-    pets: { [key: string]: string } = {};
+    constructor(private apollo: Apollo,
+        private appointmentService: AppointmentService
+    ) {}
+
+    private router = inject(Router);
 
     ngOnInit(): void {
-        this.loadAppointments(); 
-        this.loadPets();
+        this.loadAppointments();
+        this.loadAnimals();
     }
 
     // Método para cargar todas las citas
     loadAppointments(): void {
-        this.appointmentService.list().subscribe({
-        next: (response: any) => {
-            this.appointments = response.data;
-        },
-        error: (err) => {
+        const token = localStorage.getItem('authToken'); // O el método que uses para obtener el token
+
+        if (!token) {
+            console.error('Token no disponible');
+            this.errorMessage = 'No se ha encontrado el token de autenticación.';
+            return;
+        }
+
+        this.apollo
+        .watchQuery<any>({ 
+            query: GET_APPOINTMENTS,
+            context: {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            },
+        })
+        .valueChanges.subscribe({
+            next: (result) => {
+                this.appointments = result.data.getAppointments;
+                
+                console.log(this.appointments)
+            },
+            error: (err) => {
             console.error('Error loading appointments:', err);
             this.errorMessage = 'Error al cargar las citas';
-        },
+            },
         });
     }
 
-    loadPets(): void {
-        this.petService.list().subscribe({
-        next: (response: any) => {
-            // Mapear IDs a nombres
-            response.data.forEach((pet: any) => {
-            this.pets[pet._id] = pet.name;
-            });
-        },
-        error: (err) => {
-            console.error('Error al cargar las mascotas:', err);
-        },
-        });
+    // Método para cargar todas las mascotas
+    loadAnimals(): void {
+        const token = localStorage.getItem('authToken'); // O el método que uses para obtener el token
+    
+        if (!token) {
+            console.error('Token no disponible');
+            this.errorMessage = 'No se ha encontrado el token de autenticación.';
+            return;
+            }
+        
+            this.querySubscription = this.apollo
+            .watchQuery<any>({
+                query: GET_PETS,
+                context: {
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+                },
+            })
+            .valueChanges.subscribe(
+                ({ data, loading }) => {
+                this.loading = loading;
+                data.getPets.forEach((pet: any) => {
+                    this.pets[pet._id] = pet.name;
+                    });
+                },
+                (error) => {
+                console.log(error)
+                console.error('Error loading pets from GraphQL:', error);
+                this.errorMessage = 'Error al cargar las mascotas desde GraphQL.';
+                }
+        );
     }
 
     // Alternar el formulario para agregar/editar citas
@@ -66,12 +124,7 @@ export default class AppointmentsComponent implements OnInit { // Cambiar a expo
         this.currentAppointment = { ...appointment }; // Copiar datos de la cita para editar
         } else {
         this.isEditing = false;
-        this.currentAppointment = {
-            pet_id: '',
-            date_time: '',
-            reason: '',
-            status: 'scheduled',
-        };
+        this.resetForm();
         }
         this.showForm = !this.showForm;
     }
@@ -79,7 +132,9 @@ export default class AppointmentsComponent implements OnInit { // Cambiar a expo
     // Resetear el formulario
     resetForm(): void {
         this.currentAppointment = {
-        pet_id: '',
+        pet_id: {
+            name: '',
+        },
         date_time: '',
         reason: '',
         status: 'scheduled',
@@ -91,9 +146,9 @@ export default class AppointmentsComponent implements OnInit { // Cambiar a expo
     // Guardar la cita actual (crear o actualizar según el estado)
     saveAppointment(): void {
         if (this.isEditing) {
-        this.updateAppointment(); // Llamar al método de actualización
+        this.updateAppointment();
         } else {
-        this.createAppointment(); // Llamar al método de creación
+        this.createAppointment();
         }
     }
 
@@ -104,6 +159,7 @@ export default class AppointmentsComponent implements OnInit { // Cambiar a expo
             console.log('Cita creada exitosamente');
             this.loadAppointments(); // Recargar la lista de citas
             this.resetForm(); // Limpiar el formulario
+            this.router.navigate(['/appointments'])
         },
         error: (err) => {
             console.error('Error al crear la cita:', err);
@@ -127,6 +183,7 @@ export default class AppointmentsComponent implements OnInit { // Cambiar a expo
             console.log('Cita actualizada exitosamente');
             this.loadAppointments(); // Recargar la lista de citas
             this.resetForm(); // Limpiar el formulario
+            this.router.navigate(['/appointments'])
             },
             error: (err) => {
             console.error('Error al actualizar la cita:', err);
@@ -144,11 +201,11 @@ export default class AppointmentsComponent implements OnInit { // Cambiar a expo
         this.appointmentService.delete(id).subscribe({
         next: () => {
             this.loadAppointments();
+            this.router.navigate(['/appointments'])
         },
         error: (err) => {
             this.errorMessage = 'Error al eliminar la cita';
         },
         });
     }
-    
 }

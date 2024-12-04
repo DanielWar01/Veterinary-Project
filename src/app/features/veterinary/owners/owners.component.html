@@ -24,7 +24,7 @@
             <!-- Teléfono -->
             <div class="form-group my-4">
                 <label class="block text-lg font-semibold mb-2" for="phone">Teléfono:</label>
-                <input id="phone" type="number" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500" [(ngModel)]="currentOwner.phone" name="phone" required>
+                <input id="phone" type="text" class="form-control w-full px-3 py-2 border border-gray-300 rounded-lg shadow-sm focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-500" [(ngModel)]="currentOwner.phone" name="phone" required>
             </div>
 
             <!-- Correo Electrónico -->
@@ -88,7 +88,12 @@
                         <td class="px-4 py-2 whitespace-nowrap">{{ owner.gender }}</td>
                         <td class="px-4 py-2 whitespace-nowrap">{{ owner.phone }}</td>
                         <td class="px-4 py-2 whitespace-nowrap">{{ owner.email }}</td>
-                        <td class="px-4 py-2 whitespace-nowrap">{{ owner.pets }}</td>
+                        <td class="px-4 py-2 whitespace-nowrap">
+                            *
+                            @for (pet of owner.pets; track pet._id) {
+                                <span>{{pet.name}}*</span>
+                            }
+                        </td>
                         <td class="px-4 py-2 whitespace-nowrap">
                             <div class="flex justify-around">
                                 <button (click)="editOwner(owner)">
