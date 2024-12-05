@@ -24,6 +24,7 @@ export class LoginService {
 
   private setToken(token: string): void{
     localStorage.setItem(this.tokenKey, token)
+    console.warn('Token almacenado sin cifrado:', token)
   }
 
   public getToken(): string | null {

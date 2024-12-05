@@ -14,14 +14,24 @@ import { CommonModule } from '@angular/common';
 export default class LoginComponent {
   email: string = '';
   password: string = '';
+  error: string='';
   constructor(private loginService: LoginService, private router: Router){
 
   }
 
   login(): void {
     this.loginService.login(this.email, this.password).subscribe({
-      next: () => this.router.navigate(['/']),
-      error: (err) => console.error('Login fallido', err)
+      next: () => {
+        this.router.navigate(['/'])
+      },
+      error: (err) => {
+        console.error('Login fallido', err);
+        if (this.email !== 'admin@ejemplo.com'){
+          this.error = 'Correo Electrónico incorrecto';
+        }else{
+          this.error = 'Contraseña incorrecta';
+        }
+      }
     })
   }
 }

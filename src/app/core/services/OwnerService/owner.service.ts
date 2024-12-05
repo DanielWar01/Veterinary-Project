@@ -11,7 +11,7 @@ export class OwnerService {
   private http = inject(HttpClient);
   private loginService = inject(LoginService);
 
-  private baseUrl = 'https://earnest-dream-production.up.railway.app/owners';
+  private baseUrl = 'https://earnest-dream-production.up.railway.app/owne';
 
   private getHeaders(): HttpHeaders {
     const token = this.loginService.getToken()

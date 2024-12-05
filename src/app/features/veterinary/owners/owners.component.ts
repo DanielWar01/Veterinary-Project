@@ -49,7 +49,7 @@ export default class OwnersComponent implements OnInit {
 
     if (!token) {
       console.error('Token no disponible');
-      this.errorMessage = 'No se ha encontrado el token de autenticación.';
+      this.errorMessage = 'No se ha encontrado el token de autenticación de usuario.';
       return;
     }
 
@@ -69,7 +69,7 @@ export default class OwnersComponent implements OnInit {
         },
         (error) => {
           console.error('Error al cargar propietarios desde GraphQL:', error);
-          this.errorMessage = 'Error al cargar los propietarios desde GraphQL.';
+          this.errorMessage = `Error al cargar los propietarios desde GraphQL.`;
         }
       );
   }
@@ -194,7 +194,7 @@ export default class OwnersComponent implements OnInit {
         },
         (error:any) => {
           console.error('Error al eliminar el owner:', error);
-          this.errorMessage = 'Error al eliminar el propietario.';
+          this.errorMessage = `Error al eliminar el propietario. ${error.error.message} ${error.error.stack}`;
         }
       );
     }

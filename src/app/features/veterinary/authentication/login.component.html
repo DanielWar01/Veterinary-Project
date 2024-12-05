@@ -39,6 +39,9 @@
 							</a>
 						</div>
 					</div>
+					@if(error){
+						<p class="p-2 rounded-md text-white bg-red-200 font-bold duration-300">{{error}}</p>
+					}
 					<div>
 						<button (click)="login()" type="submit" class="w-full flex justify-center bg-red-800  hover:bg-red-700 text-gray-100 p-3  rounded-lg tracking-wide font-semibold  cursor-pointer transition ease-in duration-300">
                 			Acceder
